@@ -5,14 +5,14 @@ The provided sample projects offer a concise yet effective demonstration of the 
 IPWorks SFTP 2022 libraries for the corresponding edition are required to run these samples.  Free download from: [https://www.nsoftware.com/ipworkssftp](https://www.nsoftware.com/ipworkssftp)
 
 ## Reference Documentation
-[Java](https://cdn.nsoftware.com/help/IFH/java/)
-[Javascript](https://cdn.nsoftware.com/help/IFH/js/)
-[.NET](https://cdn.nsoftware.com/help/IFH/cs/)
-[Python](https://cdn.nsoftware.com/help/IFH/py/)
-[PHP](https://cdn.nsoftware.com/help/IFH/php/)
-[C++](https://cdn.nsoftware.com/help/IFH/cpp/)
-[macOS](https://cdn.nsoftware.com/help/IFH/mac/)
-[iOS](https://cdn.nsoftware.com/help/IFH/mac/)
+* [Java Edition](https://cdn.nsoftware.com/help/IFH/java/)
+* [Javascript Edition](https://cdn.nsoftware.com/help/IFH/js/)
+* [.NET Edition](https://cdn.nsoftware.com/help/IFH/cs/)
+* [Python Edition](https://cdn.nsoftware.com/help/IFH/py/)
+* [PHP Edition](https://cdn.nsoftware.com/help/IFH/php/)
+* [C++ Edition](https://cdn.nsoftware.com/help/IFH/cpp/)
+* [macOS Edition](https://cdn.nsoftware.com/help/IFH/mac/)
+* [iOS Edition](https://cdn.nsoftware.com/help/IFH/mac/)
 
 ## Sample Projects
 | Sample Project | Description |
