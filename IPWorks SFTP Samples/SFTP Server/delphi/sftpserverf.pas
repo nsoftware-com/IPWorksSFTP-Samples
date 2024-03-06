@@ -58,7 +58,8 @@ type
     procedure ipfSFTPServer1ConnectionRequest(Sender: TObject;
       const Address: string; Port: Integer; var Accept: Boolean);
     procedure ipfSFTPServer1Connected(Sender: TObject; ConnectionId,
-      StatusCode: Integer; const Description: string);
+  StatusCode: Integer; const Description: string; var CertStoreType: Integer;
+  var CertStore, CertPassword, CertSubject: string);
     procedure ipfSFTPServer1SSHUserAuthRequest(Sender: TObject;
       ConnectionId: Integer; const User, Service, AuthMethod, AuthParam: string;
       var Accept, PartialSuccess: Boolean; var AvailableMethods,
@@ -211,7 +212,8 @@ begin
 end;
 
 procedure TFormsftpserver.ipfSFTPServer1Connected(Sender: TObject; ConnectionId,
-  StatusCode: Integer; const Description: string);
+  StatusCode: Integer; const Description: string; var CertStoreType: Integer;
+  var CertStore, CertPassword, CertSubject: string);
 begin
   txtEventLog.Lines.Add('[' + inttostr(ConnectionId) + '] has connected.');
 end;
