@@ -8,7 +8,7 @@
   "main": "sftpserver.js",
   "dependencies": {
     "full-icu": "*",
-    "ipworkssftp": "^22.0.8858"
+    "ipworkssftp": "^22.0.8676"
   },
   "scripts": {
     "sftpserver": "node sftpserver.js"

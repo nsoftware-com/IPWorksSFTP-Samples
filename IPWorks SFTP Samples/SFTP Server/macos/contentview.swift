@@ -4,7 +4,7 @@ import IPWorksSFTP
 struct ContentView: View, SFTPServerDelegate {
   @State private var outputRes: String = ""
   
-  func onConnected(connectionId: Int32, statusCode: Int32, description: String, certStoreType: inout Int32, certStore: inout String, certPassword: inout String, certSubject: inout String) {}
+  func onConnected(connectionId: Int32, statusCode: Int32, description: String) {}
   func onConnectionRequest(address: String, port: Int32, accept: inout Bool) {}
   func onDirCreate(connectionId: Int32, user: String, path: String, fileType: Int32, fileSize: Int64, fileOwner: String, fileGroup: String, filePermissions: Int32, fileATime: Int64, fileCreateTime: Int64, fileMTime: Int64, fileAttribBits: Int32, fileAttribBitsValid: Int32, otherAttributes: String, beforeExec: Bool, statusCode: inout Int32) {}
   func onDirList(connectionId: Int32, user: String, path: String, beforeExec: Bool, statusCode: inout Int32) {}

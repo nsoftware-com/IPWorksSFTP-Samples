@@ -245,6 +245,7 @@ object FormSftp: TFormSftp
     RemotePath = '././././././'
     SSHCertStore = 'MY'
     SSHCompressionAlgorithms = 'none,'
+    SSHEncryptionAlgorithms = 'aes256-cbc,3des-cbc,'
     OnDirList = SFTP1DirList
     OnEndTransfer = SFTP1EndTransfer
     OnSSHServerAuthentication = SFTP1SSHServerAuthentication
