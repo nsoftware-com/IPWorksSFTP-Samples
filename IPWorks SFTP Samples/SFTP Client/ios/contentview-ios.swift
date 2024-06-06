@@ -1,7 +1,7 @@
 import SwiftUI
 import IPWorksSFTP
 
-struct ContentView: View, SFTPDelegate {
+struct ContentView: View, SFTPClientDelegate {
   func onConnected(statusCode: Int32, description: String) {}
   func onConnectionStatus(connectionEvent: String, statusCode: Int32, description: String) {}
   func onDirList(dirEntry: String, fileName: String, isDir: Bool, fileSize: Int64, fileTime: String, isSymlink: Bool) {
@@ -22,7 +22,7 @@ struct ContentView: View, SFTPDelegate {
   func onStartTransfer(direction: Int32, localFile: String, remoteFile: String) {}
   func onTransfer(direction: Int32, localFile: String, remoteFile: String, bytesTransferred: Int64, percentDone: Int32, text: Data, cancel: inout Bool) {}
   
-  var client = SFTP()
+  var client = SFTPClient()
   var documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] + "/"
   @State private var server: String = ""
   @State private var username: String = ""
@@ -46,7 +46,7 @@ struct ContentView: View, SFTPDelegate {
   var body: some View {
     VStack(alignment: .center)
     {
-      Text("This demo uses the SFTP module to connect to a remote SFTP server and list files. You may also enter a local or remote file, then select Get to download or Put to upload.")
+      Text("This demo uses the SFTPClient module to connect to a remote SFTP server and list files. You may also enter a local or remote file, then select Get to download or Put to upload.")
         .foregroundColor(Color.blue)
       HStack{
         Text("Server:")

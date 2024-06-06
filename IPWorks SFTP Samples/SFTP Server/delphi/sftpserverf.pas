@@ -1,5 +1,5 @@
 (*
- * IPWorks SFTP 2022 Delphi Edition - Sample Project
+ * IPWorks SFTP 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks SFTP in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -58,7 +58,8 @@ type
     procedure ipfSFTPServer1ConnectionRequest(Sender: TObject;
       const Address: string; Port: Integer; var Accept: Boolean);
     procedure ipfSFTPServer1Connected(Sender: TObject; ConnectionId,
-      StatusCode: Integer; const Description: string);
+  StatusCode: Integer; const Description: string; var CertStoreType: Integer;
+  var CertStore, CertPassword, CertSubject: string);
     procedure ipfSFTPServer1SSHUserAuthRequest(Sender: TObject;
       ConnectionId: Integer; const User, Service, AuthMethod, AuthParam: string;
       var Accept, PartialSuccess: Boolean; var AvailableMethods,
@@ -152,11 +153,11 @@ begin
   ipfSFTPServer1.RootDirectory := txtRootDir.Text;
 
   try
-    ipfSFTPServer1.Listening := true;
+    ipfSFTPServer1.StartListening();
     txtEventLog.Lines.Add('Server is now listening on port ' + inttostr(ipfSFTPServer1.LocalPort));
     btnStop.Enabled := true;
     btnStart.Enabled := false;
-  except on E: EipfSFTPServer do
+  except on E: Exception do
     showMessage(E.Message);
   end;
 end;
@@ -211,7 +212,8 @@ begin
 end;
 
 procedure TFormsftpserver.ipfSFTPServer1Connected(Sender: TObject; ConnectionId,
-  StatusCode: Integer; const Description: string);
+  StatusCode: Integer; const Description: string; var CertStoreType: Integer;
+  var CertStore, CertPassword, CertSubject: string);
 begin
   txtEventLog.Lines.Add('[' + inttostr(ConnectionId) + '] has connected.');
 end;

@@ -241,11 +241,9 @@ object FormSftp: TFormSftp
       OnClick = ButtonRemRefreshClick
     end
   end
-  object SFTP1: TipfSFTP
-    RemotePath = '././././././'
+  object SFTP1: TipfSFTPClient
     SSHCertStore = 'MY'
     SSHCompressionAlgorithms = 'none,'
-    SSHEncryptionAlgorithms = 'aes256-cbc,3des-cbc,'
     OnDirList = SFTP1DirList
     OnEndTransfer = SFTP1EndTransfer
     OnSSHServerAuthentication = SFTP1SSHServerAuthentication

@@ -1,5 +1,5 @@
 /*
- * IPWorks SFTP 2022 JavaScript Edition - Sample Project
+ * IPWorks SFTP 2024 JavaScript Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks SFTP in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -33,7 +33,7 @@ async function main() {
     process.exit();
   }
 
-  const sftp1 = new ipworkssftp.sftp();
+  const sftp1 = new ipworkssftp.sftpclient();
 
   sftp1.setSSHUser(argv[3]);
   sftp1.setSSHPassword(argv[4]);
@@ -108,12 +108,12 @@ async function main() {
             await sftp1.listDirectory();
           } else {
             const curPath = sftp1.getRemotePath();
-            sftp1.setRemotePath(args[1]);
+            sftp1.changeRemotePath(args[1]);
             try {
               await sftp1.listDirectory();
             } catch (ex) {
               console.log(`Error: ${ex}`);
-              sftp1.setRemotePath(curPath);
+              sftp1.changeRemotePath(curPath);
             }
           }
         } catch (ex) {
@@ -133,7 +133,7 @@ async function main() {
           console.log("Usage: cd remote path");
           sftpprompt();
         } else {
-          await sftp1.setRemotePath(args[1]).catch((err) => { console.log(`Error: ${err.message}`); });
+          await sftp1.changeRemotePath(args[1]).catch((err) => { console.log(`Error: ${err.message}`); });
           sftpprompt();
         }
         break;

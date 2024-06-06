@@ -4,8 +4,8 @@ import IPWorksSFTP
 struct ContentView: View, SFTPServerDelegate {
   @State private var outputRes: String = ""
   
-  func onConnected(connectionId: Int32, statusCode: Int32, description: String) {}    
-  func onConnectionRequest(address: String, port: Int32, accept: inout Bool) {}    
+  func onConnected(connectionId: Int32, statusCode: Int32, description: String, certStoreType: inout Int32, certStore: inout String, certPassword: inout String, certSubject: inout String) {}
+  func onConnectionRequest(address: String, port: Int32, accept: inout Bool) {}
   func onDirCreate(connectionId: Int32, user: String, path: String, fileType: Int32, fileSize: Int64, fileOwner: String, fileGroup: String, filePermissions: Int32, fileATime: Int64, fileCreateTime: Int64, fileMTime: Int64, fileAttribBits: Int32, fileAttribBitsValid: Int32, otherAttributes: String, beforeExec: Bool, statusCode: inout Int32) {}    
   func onDirList(connectionId: Int32, user: String, path: String, beforeExec: Bool, statusCode: inout Int32) {}    
   func onDirRemove(connectionId: Int32, user: String, path: String, beforeExec: Bool, statusCode: inout Int32) {}    
@@ -75,15 +75,12 @@ struct ContentView: View, SFTPServerDelegate {
       {
         if (server.listening)
         {
-          try server.setListening(listening: false)
+          try server.stopListening()
         }
         else
         {
-          server.sshCertStore = "/Applications/IPWorks SFTP 2022 macOS Edition/demos/SFTP Server/sftpserver.pfx"
-          server.sshCertStoreType = SftpserverSSHCertStoreTypes.cstPFXFile
-          server.sshCertStorePassword = "demo"
-          try server.setSSHCertSubject(sshCertSubject: "*")
-          try server.setListening(listening: true)
+          server.sshCert = Certificate(storeType: CertStoreTypes.cstPFXFile, store: "/Applications/IPWorks SFTP 2024 macOS Edition/demos/SFTP Server/sftpserver.pfx", storePassword: "demo", subject: "*")
+          try server.startListening()
           outputRes+="Server listening at: "+server.localHost+" port: "+String(server.localPort)+"\nLog in with user: test password: test\n"
         }
       }
@@ -91,7 +88,7 @@ struct ContentView: View, SFTPServerDelegate {
       {
         do
         {
-          try server.setListening(listening: false)
+          try server.stopListening()
         }
         catch {}
         outputRes += "Error: \(error)"

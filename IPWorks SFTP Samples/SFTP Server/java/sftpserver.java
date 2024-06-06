@@ -1,5 +1,5 @@
 /*
- * IPWorks SFTP 2022 Java Edition - Sample Project
+ * IPWorks SFTP 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks SFTP in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -18,47 +18,47 @@ import java.lang.*;
 import ipworkssftp.*;
 
 public class sftpserver extends ConsoleDemo{
-	public static class myFTPServer extends Sftpserver {
+	public static class myFTPServer extends SFTPServer {
 		
 		public myFTPServer() {
 			super();
 			try {
-				addSftpserverEventListener(new ipworkssftp.SftpserverEventListener() {
+				addSFTPServerEventListener(new ipworkssftp.SFTPServerEventListener() {
 
-					public void SSHStatus(SftpserverSSHStatusEvent e) {	
+					public void SSHStatus(SFTPServerSSHStatusEvent e) {	
 						Log(e.connectionId,e.message);
 					}
-					public void SSHUserAuthRequest(SftpserverSSHUserAuthRequestEvent e) {	
+					public void SSHUserAuthRequest(SFTPServerSSHUserAuthRequestEvent e) {	
 						if(e.user.equals("test") && !e.authMethod.equals("none") && e.authParam.equals("test"))
 						{
 							e.accept = true;
 							Log(e.user + " has successfully authenticated.");
 						}
 					}
-					public void connected(SftpserverConnectedEvent e) {	
+					public void connected(SFTPServerConnectedEvent e) {	
 						Log(e.connectionId,"Now Connected");
 					}
-					public void connectionRequest(SftpserverConnectionRequestEvent e) {
+					public void connectionRequest(SFTPServerConnectionRequestEvent e) {
 						Log(e.address + ":" + String.valueOf(e.port) + " is attempting to connect.");
 					}
-					public void dirCreate(SftpserverDirCreateEvent e) {	
+					public void dirCreate(SFTPServerDirCreateEvent e) {	
 						Log(e.user + " created the directory " + e.path);
 					}
-					public void dirList(SftpserverDirListEvent e) {	
+					public void dirList(SFTPServerDirListEvent e) {	
 					}
-					public void dirRemove(SftpserverDirRemoveEvent e) {	
+					public void dirRemove(SFTPServerDirRemoveEvent e) {	
 						Log(e.user + " deleted the directory " + e.path);
 					}
-					public void disconnected(SftpserverDisconnectedEvent e) {	
+					public void disconnected(SFTPServerDisconnectedEvent e) {	
 						Log(e.connectionId, "Now Disconnected");
 					}
-					public void error(SftpserverErrorEvent e) {	
+					public void error(SFTPServerErrorEvent e) {	
 						Log(e.connectionId, "Error: " + e.description);
 					}
-					public void fileClose(SftpserverFileCloseEvent e) {	
+					public void fileClose(SFTPServerFileCloseEvent e) {	
 						Log(e.user + " transferred " + e.path);
 					}
-					public void fileOpen(SftpserverFileOpenEvent e) {	
+					public void fileOpen(SFTPServerFileOpenEvent e) {	
 						String operation = "";
 						if((e.flags & 1) != 0) //Read
 							operation = "downloading";
@@ -67,24 +67,24 @@ public class sftpserver extends ConsoleDemo{
 						
 						Log(e.user + " started " + operation + " " + e.path);
 					}
-					public void fileRead(SftpserverFileReadEvent e) {	
+					public void fileRead(SFTPServerFileReadEvent e) {	
 					}
-					public void fileRemove(SftpserverFileRemoveEvent e) {	
+					public void fileRemove(SFTPServerFileRemoveEvent e) {	
 						Log(e.user + " deleted the file " + e.path);
 					}
-					public void fileRename(SftpserverFileRenameEvent e) {
+					public void fileRename(SFTPServerFileRenameEvent e) {
 						Log(e.user + " renamed the file " + e.path);
 					}
-					public void fileWrite(SftpserverFileWriteEvent e) {	
+					public void fileWrite(SFTPServerFileWriteEvent e) {	
 					}
-					public void getAttributes(SftpserverGetAttributesEvent e) {	
+					public void getAttributes(SFTPServerGetAttributesEvent e) {	
 					}
-					public void resolvePath(SftpserverResolvePathEvent e) {	
+					public void resolvePath(SFTPServerResolvePathEvent e) {	
 					}
-					public void setAttributes(SftpserverSetAttributesEvent e) {
+					public void setAttributes(SFTPServerSetAttributesEvent e) {
 					}
 					@Override
-					public void log(SftpserverLogEvent arg0) {
+					public void log(SFTPServerLogEvent arg0) {
 					}
 				});
 				
@@ -123,7 +123,7 @@ public class sftpserver extends ConsoleDemo{
 			
 			sftpserver1.setRootDirectory(prompt("Root Directory", ":", "./"));
 			sftpserver1.setLocalPort(Integer.parseInt(prompt("Port", ":", "22")));
-			sftpserver1.setListening(true);
+			sftpserver1.startListening();
 			
 			System.out.println("Server listening on port " + sftpserver1.getLocalPort() + ".");
 			System.out.println("Press Q to exit.\r\n\r\n");
@@ -168,15 +168,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {

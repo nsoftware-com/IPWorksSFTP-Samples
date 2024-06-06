@@ -67,7 +67,7 @@ begin
     ipfCertMgr1.CreateCertificate('CN=' + txtNewCertSubject.Text, strtoint(txtNewCertSerial.Text));
     ipfCertMgr1.ExportCertificate(fileName, txtNewCertPass.Text);
     ipfCertMgr1.DeleteCertificate();
-  except on E: EipfCertMgr do
+  except on E: Exception do
     ShowMessage('Could not generate new certificate: ' + E.Message);
   end;
 

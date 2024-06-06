@@ -1,5 +1,5 @@
 (*
- * IPWorks SFTP 2022 Delphi Edition - Sample Project
+ * IPWorks SFTP 2024 Delphi Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks SFTP in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -17,7 +17,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Graphics, Controls, Classes, Forms, Dialogs, StdCtrls, ExtCtrls,
-  ipfcore, ipftypes, ipfsftp;
+  ipfcore, ipftypes, ipfsftpclient;
 
 const
   OffLineConst    = 1;
@@ -47,7 +47,7 @@ type
     ButtonRemRename: TButton;
     ButtonRemDelete: TButton;
     ButtonRemRefresh: TButton;
-    SFTP1: TipfSFTP;
+    SFTP1: TipfSFTPClient;
 
     procedure UpdateLocal;
     procedure UpdateRemote;
@@ -129,7 +129,7 @@ begin
       begin
          if ShowModal = mrOK then
          begin
-            SFTP1.RemotePath := '';
+            SFTP1.ChangeRemotePath('');
             SFTP1.RemoteFile := '';
             SFTP1.SSHHost := EditHostName.Text;
             SFTP1.SSHUser := EditUser.Text;
@@ -142,7 +142,7 @@ begin
                ComboBoxRemHistory.Items.Insert(0, SFTP1.RemotePath);
                ComboBoxRemHistory.ItemIndex := 0;
                UpdateRemote;
-            except on E: EipfSFTP do
+            except on E: Exception do
                UpdateNotes(E.Message);
             end;
          end;
@@ -152,7 +152,7 @@ begin
    begin
       try
         SFTP1.SSHLogoff
-      except on E: EipfSFTP do
+      except on E: Exception do
          UpdateNotes(E.Message);
       end;
       State := OffLineConst;
@@ -168,7 +168,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          SFTP1.SSHLogoff;
-      except on E: EipfSFTP do
+      except on E: Exception do
          UpdateNotes(E.Message);
       end;
       Screen.Cursor := crDefault;
@@ -203,7 +203,7 @@ begin
    if Name[1] = '<' then
    begin
       Delete(Name, 1, 7); { Remove first seven characters, '<DIR>  '}
-      SFTP1.RemotePath := SFTP1.RemotePath + '/' + Name;
+      SFTP1.ChangeRemotePath(Name);
       UpdateComboBox(ComboBoxRemHistory, SFTP1.RemotePath);
       UpdateRemote;
    end else
@@ -320,7 +320,7 @@ begin
 
       if ShowModal = mrOk then
       begin
-         SFTP1.RemotePath := EditLine.Text;
+         SFTP1.ChangeRemotePath(EditLine.Text);
          UpdateComboBox(ComboBoxRemHistory, EditLine.Text);
          UpdateRemote;
       end;
@@ -341,7 +341,7 @@ begin
          try
             SFTP1.MakeDirectory(EditLine.Text);
             UpdateRemote;
-         except on E: EipfSFTP do
+         except on E: Exception do
             UpdateNotes(E.Message);
          end;
       end;
@@ -375,7 +375,7 @@ begin
          SFTP1.RemoteFile := Name;
          try
             SFTP1.RenameFile(EditLine.Text);
-         except on E: EipfSFTP do
+         except on E: Exception do
             UpdateNotes(E.Message);
          end;
          UpdateRemote;
@@ -411,7 +411,7 @@ begin
                SFTP1.RemoveDirectory(Name)
             else
                SFTP1.DeleteFile(Name);
-         except on E: EipfSFTP do
+         except on E: Exception do
             UpdateNotes(E.Message);
          end;
          UpdateRemote;
@@ -440,7 +440,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          SFTP1.Download;
-      except on E: EipfSFTP do
+      except on E: Exception do
       begin
          UpdateNotes(E.Message);
          UpdateRemote;  // this is to test the connection
@@ -472,7 +472,7 @@ begin
       Screen.Cursor := crAppStart;
       try
          SFTP1.Upload;
-      except on E: EipfSFTP do
+      except on E: Exception do
          UpdateNotes(E.Message);
       end;
 
@@ -540,11 +540,11 @@ begin
    SFTP1.RemoteFile := '';
    try
       SFTP1.ListDirectory;
-   except on E: EipfSFTP do
+   except on E: Exception do
    begin
       try
          SFTP1.Interrupt;
-      except on E: EipfSFTP do
+      except on E: Exception do
       end;
       State := OffLineConst;
       UpdateButtons;
@@ -593,7 +593,7 @@ begin
    Screen.Cursor := crAppStart;
    try
       SFTP1.Interrupt;
-   except on E: EipfSFTP do
+   except on E: Exception do
       UpdateNotes(E.Message);
    end;
    Screen.Cursor := crDefault;
@@ -649,7 +649,7 @@ end;
 procedure TFormSftp.ComboBoxRemHistoryChange(Sender: TObject);
 begin
    // Return to recent remote directory
-   SFTP1.RemotePath := ComboBoxRemHistory.Text;
+   SFTP1.ChangeRemotePath(ComboBoxRemHistory.Text);
    UpdateComboBox(ComboBoxRemHistory, ComboBoxRemHistory.Text);
    UpdateRemote;
 end;

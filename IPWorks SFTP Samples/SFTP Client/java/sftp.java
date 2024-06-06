@@ -1,5 +1,5 @@
 /*
- * IPWorks SFTP 2022 Java Edition - Sample Project
+ * IPWorks SFTP 2024 Java Edition - Sample Project
  *
  * This sample project demonstrates the usage of IPWorks SFTP in a 
  * simple, straightforward way. It is not intended to be a complete 
@@ -20,7 +20,7 @@ import java.lang.*;
 import ipworkssftp.*;
 
 public class sftp extends ConsoleDemo{
-	public static class mySFTP extends Sftp {
+	public static class mySFTP extends SFTPClient {
 		/**
 		 *
 		 */
@@ -31,30 +31,30 @@ public class sftp extends ConsoleDemo{
 		public mySFTP() {
 			super();
 			try {
-				addSftpEventListener(new DefaultSftpEventListener() {
-					public void dirList(SftpDirListEvent e) {
+				addSFTPClientEventListener(new DefaultSFTPClientEventListener() {
+					public void dirList(SFTPClientDirListEvent e) {
 						System.out.println(e.dirEntry);
 					}
-					public void connected(SftpConnectedEvent e) {
+					public void connected(SFTPClientConnectedEvent e) {
 					}
-					public void connectionStatus(SftpConnectionStatusEvent e) {
+					public void connectionStatus(SFTPClientConnectionStatusEvent e) {
 					}
-					public void disconnected(SftpDisconnectedEvent e) {
+					public void disconnected(SFTPClientDisconnectedEvent e) {
 					}
-					public void endTransfer(SftpEndTransferEvent e) {
+					public void endTransfer(SFTPClientEndTransferEvent e) {
 						long endtime;
 						endtime = System.currentTimeMillis();
 						transtime = endtime - sftp1.transtime;
 					}
-					public void error(SftpErrorEvent e) {
+					public void error(SFTPClientErrorEvent e) {
 						System.out.println("Error "+e.errorCode+": "+e.description);
 					}
 					
-					public void SSHCustomAuth(SftpSSHCustomAuthEvent e){}
+					public void SSHCustomAuth(SFTPClientSSHCustomAuthEvent e){}
 					
-					public void SSHKeyboardInteractive(SftpSSHKeyboardInteractiveEvent e) {
+					public void SSHKeyboardInteractive(SFTPClientSSHKeyboardInteractiveEvent e) {
 					}					
-					public void SSHServerAuthentication(SftpSSHServerAuthenticationEvent e) {
+					public void SSHServerAuthentication(SFTPClientSSHServerAuthenticationEvent e) {
 						if (e.accept) {
 							return;
 						}
@@ -68,12 +68,12 @@ public class sftp extends ConsoleDemo{
 						}
 						return;
 					}
-					public void SSHStatus(SftpSSHStatusEvent e) {
+					public void SSHStatus(SFTPClientSSHStatusEvent e) {
 					}
-					public void startTransfer(SftpStartTransferEvent e) {
+					public void startTransfer(SFTPClientStartTransferEvent e) {
 						transtime = System.currentTimeMillis();
 					}
-					public void transfer(SftpTransferEvent e) {
+					public void transfer(SFTPClientTransferEvent e) {
 						transbytes = e.bytesTransferred;
 					}
 				});
@@ -134,7 +134,7 @@ public class sftp extends ConsoleDemo{
 						System.out.println("usage: cd remotePath");
 						continue;
 					}
-					sftp1.setRemotePath(argument[1]);
+					sftp1.changeRemotePath(argument[1]);
 				} else if (argument[0].equalsIgnoreCase("get")) {	// get remotefile
 					if(argument.length <2)
 					{
@@ -151,9 +151,9 @@ public class sftp extends ConsoleDemo{
 				} else if (argument[0].equalsIgnoreCase("ls")) {	// ls [dir]
 					if (argument.length > 1) {
 						pathname = sftp1.getRemotePath();
-						sftp1.setRemotePath(argument[1]);
+						sftp1.changeRemotePath(argument[1]);
 						sftp1.listDirectory();
-						sftp1.setRemotePath(pathname);
+						sftp1.changeRemotePath(pathname);
 					} else {
 						sftp1.listDirectory();
 					}
@@ -243,15 +243,13 @@ class ConsoleDemo {
     System.out.print(label + punctuation + " ");
     return input();
   }
-
-  static String prompt(String label, String punctuation, String defaultVal)
-  {
-	System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
-	String response = input();
-	if(response.equals(""))
-		return defaultVal;
-	else
-		return response;
+  static String prompt(String label, String punctuation, String defaultVal) {
+      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      String response = input();
+      if (response.equals(""))
+        return defaultVal;
+      else
+        return response;
   }
 
   static char ask(String label) {
