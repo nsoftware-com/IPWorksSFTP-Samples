@@ -169,7 +169,7 @@ class ConsoleDemo {
     return input();
   }
   static String prompt(String label, String punctuation, String defaultVal) {
-      System.out.print(label + " [" + defaultVal + "] " + punctuation + " ");
+      System.out.print(label + " [" + defaultVal + "]" + punctuation + " ");
       String response = input();
       if (response.equals(""))
         return defaultVal;
@@ -195,6 +195,32 @@ class ConsoleDemo {
     }
     System.out.println(": " + e.getMessage());
     e.printStackTrace();
+  }
+
+  /**
+   * Takes a list of switch arguments or name-value arguments and turns it into a map.
+   */
+  static java.util.Map<String, String> parseArgs(String[] args) {
+    java.util.Map<String, String> map = new java.util.HashMap<String, String>();
+    
+    for (int i = 0; i < args.length; i++) {
+      // Add a key to the map for each argument.
+      if (args[i].startsWith("-")) {
+        // If the next argument does NOT start with a "-" then it is a value.
+        if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+          // Save the value and skip the next entry in the list of arguments.
+          map.put(args[i].toLowerCase().replaceFirst("^-+", ""), args[i + 1]);
+          i++;
+        } else {
+          // If the next argument starts with a "-", then we assume the current one is a switch.
+          map.put(args[i].toLowerCase().replaceFirst("^-+", ""), "");
+        }
+      } else {
+        // If the argument does not start with a "-", store the argument based on the index.
+        map.put(Integer.toString(i), args[i].toLowerCase());
+      }
+    }
+    return map;
   }
 }
 

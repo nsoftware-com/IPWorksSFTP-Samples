@@ -195,10 +195,10 @@ class ConsoleDemo
 
     for (int i = 0; i < args.Length; i++)
     {
-      // Add an key to the dictionary for each argument
+      // Add a key to the dictionary for each argument.
       if (args[i].StartsWith("/"))
       {
-        // If the next argument does NOT start with a "/" then it is a value.
+        // If the next argument does NOT start with a "/", then it is a value.
         if (i + 1 < args.Length && !args[i + 1].StartsWith("/"))
         {
           // Save the value and skip the next entry in the list of arguments.
