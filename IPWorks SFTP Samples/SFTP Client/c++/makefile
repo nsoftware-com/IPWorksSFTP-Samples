@@ -1,5 +1,5 @@
 #
-# IPWorks SFTP 2024 .NET Edition - Sample Project
+# IPWorks SFTP 2024 C++ Edition - Sample Project
 #
 # This sample project demonstrates the usage of IPWorks SFTP in a 
 # simple, straightforward way. It is not intended to be a complete 
@@ -31,10 +31,13 @@ src: ../../src/ipworkssftp.o
 	g++ -c -fno-exceptions -fno-rtti -fPIC -arch arm64 -o ../../src/ipworkssftp.o ../../src/ipworkssftp.cpp
 
 else # LINUX
-ifeq ($(shell uname -m), x86_64)
-  LIB=lib64
-else
+CPU=$(shell uname -m)
+# It's assumed that a product is always built for Linux/x64 platform
+ifeq ($(CPU), $(filter $(CPU), i386 i686))
   LIB=lib
+endif
+ifeq ($(LIB),)
+  LIB=lib64
 endif
 
 R_PATH=-Wl,-rpath,../../$(LIB)/,-rpath,.
@@ -42,7 +45,7 @@ LD_FLAGS = -lipworkssftp  -L../../$(LIB)/
 LD_FLAGS_SRC = -lz 
 
 all:
-	g++ -D UNIX -o sftp sftp.cpp  -I../../include/ $(LD_FLAGS) $(R_PATH) 
+	g++ -D UNIX  -o sftp sftp.cpp  -I../../include/ $(LD_FLAGS) $(R_PATH)
 
 src: ../../src/ipworkssftp.o
 	g++ -D UNIX -o sftp ../../src/ipworkssftp.o sftp.cpp  -I../../include/ $(LD_FLAGS_SRC)
